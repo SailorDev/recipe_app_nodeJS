@@ -1,3 +1,5 @@
+const Subscriber = require('./subscriber');
+
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const userSchema = new Schema({
@@ -42,6 +44,26 @@ const userSchema = new Schema({
       timestamps: true
    }
 );
+
+
+// mongoose hooks to perform operation before database change.
+userSchema.pre("save", function (next) {
+   let user = this;
+   if (user.subscribedAccount === undefined) {
+      Subscriber.findOne({ email: user.email })
+         .then(subscriber => {
+            user.subscribedAccount = subscriber;  // connection
+            next();
+         })
+
+         .catch(error => {
+            console.log(`Error in connecting subscriber : ${error.message}`);
+            next(error);
+         })
+   } else {
+      next();
+   }
+});
 
 
 userSchema.virtual("fullName")

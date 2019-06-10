@@ -1,20 +1,64 @@
-const User = require('../models/user');
+"use strict";
+
+const User = require("../models/user");
 
 module.exports = {
    index: (req, res, next) => {
-      User.find({})
+      User.find()
          .then(users => {
             res.locals.users = users;
             next();
          })
-
          .catch(error => {
-            console.log(`Error Fetching users: ${error.message}`)
+            console.log(`Error fetching users: ${error.message}`);
             next(error);
-         })
+         });
    },
-
-   indexView: (req, res, next) => {
+   indexView: (req, res) => {
       res.render("users/index");
+   },
+   new: (req, res) => {
+      res.render("users/new");
+   },
+   create: (req, res, next) => {
+      let userParams = {
+         name: {
+            first: req.body.first,
+            last: req.body.last
+         },
+         email: req.body.email,
+         password: req.body.password,
+         zipCode: req.body.zipCode
+      };
+      User.create(userParams)
+         .then(user => {
+            res.locals.redirect = "/users";
+            res.locals.user = user;
+            next();
+         })
+         .catch(error => {
+            console.log(`Error saving user: ${error.message}`);
+            next(error);
+         });
+   },
+   redirectView: (req, res, next) => {
+      let redirectPath = res.locals.redirect;
+      if (redirectPath) res.redirect(redirectPath);
+      else next();
+   },
+   show: (req, res, next) => {
+      let userId = req.params.id;   // collect user ID's From request Params
+      User.findById(userId)    // Find User By ID
+         .then(user => {
+            res.locals.user = user;    // PASS user through res Object to next middleware func.
+            next();
+         })
+         .catch(error => {
+            console.log(`Error fetching user by ID: ${error.message}`);
+            next(error);
+         });
+   },
+   showView: (req, res) => {
+      res.render("users/show");
    }
-}
+};

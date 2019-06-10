@@ -2,6 +2,7 @@
 
 const express = require("express");
 const app = express();
+const router = express.Router();
 
 const errorController = require("./controllers/errorController");
 const homeController = require("./controllers/homeController");
@@ -38,25 +39,31 @@ app.use(express.static("public"));
 app.use(layouts);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use("/", router);
 
 // Play with routes
 app.use(homeController.logRequestPaths);
 
-app.get("/name", homeController.respondWithName);
-app.get("/items/:vegetable", homeController.sendReqParam);
+router.get("/name", homeController.respondWithName);
+router.get("/items/:vegetable", homeController.sendReqParam);
 
-app.get("/subscribers", subscribersController.getAllSubscribers, (req, res, next) => {
+router.get("/subscribers", subscribersController.getAllSubscribers, (req, res, next) => {
   res.render("index", { subscribers: req.data });
 });
 
-app.get("/", homeController.index);
-app.get("/courses", homeController.showCourses);
+router.get("/", homeController.index);
+router.get("/courses", homeController.showCourses);
 
-app.get("/contact", subscribersController.getSubscriptionPage);
-app.post("/subscribe", subscribersController.saveSubscriber);
+router.get("/contact", subscribersController.getSubscriptionPage);
+router.post("/subscribe", subscribersController.saveSubscriber);
 
-app.get('/users', usersController.index, usersController.indexView);
+// play routes (Users)
+router.get('/users', usersController.index, usersController.indexView);
+router.get('/users/new', usersController.new);
+router.post('/users/create', usersController.create, usersController.redirectView);
+router.get('/users/:id', usersController.show, usersController.showView);
 
+// Play with Error Controller
 app.use(errorController.logErrors);
 app.use(errorController.respondNoResourceFound);
 app.use(errorController.respondInternalError);

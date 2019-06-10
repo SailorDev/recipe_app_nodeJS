@@ -9,20 +9,27 @@
       <th>Zip Code</th>
     </tr>
   </thead>
-  
+
   <tbody>
     <% users.forEach(user => { %>
+
     <tr>
       <td>
-        <%= user.fullName %>
+        <a href="<%= `/users/${user._id}` %>">
+          <%= user.fullName %>
+        </a>
       </td>
+
       <td>
         <%= user.email %>
       </td>
+
       <td>
         <%= user.zipCode %>
       </td>
+      
     </tr>
     <% }); %>
   </tbody>
+
 </table>

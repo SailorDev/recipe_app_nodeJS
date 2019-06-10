@@ -1,0 +1,51 @@
+<%# here users can create their accounts ! %>
+
+<div class="data-form">
+   
+   <form class="form-signin" action="/users/create" method="POST">
+
+      <h2 class="form-signin-heading">Create A New User</h2>
+
+      <label for="inputFirstName">First Name</label>
+      <input type="text" name="first" id="inputFirstName" placeholder="First" autofocus class="form-control">
+
+      <label for="inputLastName">Last Name</label>
+      <input type="text" name="last" id="inputLastName" placeholder="Last" autofocus class="form-control">
+
+      <label for="inputPassword">Password</label>
+      <input type="password" name="password" id="inputPassword" placeholder="Password" required class="form-control">
+
+      <label for="inputEmail">Email</label>
+      <input type="email" name="email" id="inputEmail" placeholder="Email Address" required class="form-control">
+
+      <label for="inputZipCode">Zip Code</label>
+      <input type="text" name="zipCode" id="inputZipCode" pattern="\d*" placeholder="Zip Code" required class="form-control">
+
+      <br /><button type="submit" class="btn btn-lg btn-primary btn-block">Sign In</button>
+
+   </form>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
